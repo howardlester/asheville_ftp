@@ -1,6 +1,7 @@
 import pino from "pino";
 import path from "path";
 import fs from "fs";
+import { DateTime } from "luxon";
 
 export class Logger {
   private static instance: Logger;
@@ -19,13 +20,18 @@ export class Logger {
   }
 
   private createLogger(): pino.Logger {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
+    const now = DateTime.now().toUTC();
+    const year = now.year;
+    const month = String(now.month).padStart(2, "0");
+    const day = String(now.day).padStart(2, "0");
 
     // Create directory structure: logs/2025/07/11.log
-    const logDir = path.join(process.cwd(), "public/logs", `${year}`, `${month}`);
+    const logDir = path.join(
+      process.cwd(),
+      "public/logs",
+      `${year}`,
+      `${month}`
+    );
     const logFile = path.join(logDir, `${day}.log`);
 
     // Ensure directory exists
