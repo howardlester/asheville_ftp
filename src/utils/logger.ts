@@ -1,0 +1,80 @@
+import pino from "pino";
+import path from "path";
+import fs from "fs";
+
+export class Logger {
+  private static instance: Logger;
+  private logger: pino.Logger;
+
+  private constructor() {
+    this.logger = this.createLogger();
+  }
+
+  public static getInstance(): Logger {
+    if (!Logger.instance) {
+      Logger.instance = new Logger();
+    }
+
+    return Logger.instance;
+  }
+
+  private createLogger(): pino.Logger {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    // Create directory structure: logs/2025/07/11.log
+    const logDir = path.join(process.cwd(), "public/logs", `${year}`, `${month}`);
+    const logFile = path.join(logDir, `${day}.log`);
+
+    // Ensure directory exists
+    fs.mkdirSync(logDir, { recursive: true });
+
+    return pino(
+      {
+        level: process.env.LOG_LEVEL || "info",
+        timestamp: pino.stdTimeFunctions.isoTime,
+        formatters: {
+          level: (label) => {
+            return { level: label };
+          },
+        },
+      },
+      pino.destination(logFile)
+    );
+  }
+
+  public info(message: string, ...args: any[]): void {
+    this.logger.info(message, ...args);
+  }
+
+  public error(message: string, ...args: any[]): void {
+    this.logger.error(message, ...args);
+  }
+
+  public warn(message: string, ...args: any[]): void {
+    this.logger.warn(message, ...args);
+  }
+
+  public debug(message: string, ...args: any[]): void {
+    this.logger.debug(message, ...args);
+  }
+
+  public fatal(message: string, ...args: any[]): void {
+    this.logger.fatal(message, ...args);
+  }
+
+  // Method to create a new logger for the current date (useful for long-running processes)
+  public refreshLogger(): void {
+    this.logger = this.createLogger();
+  }
+
+  // Get the underlying pino logger for advanced usage
+  public getPinoLogger(): pino.Logger {
+    return this.logger;
+  }
+}
+
+// Export a singleton instance
+export const logger = Logger.getInstance();

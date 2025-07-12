@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { processFFtpRequest } from "../controllers/ftpController";
+import {processFFtpRequest } from "../controllers/ftpController";
 
 export const ftpRoutes = Router();
 
