@@ -13,7 +13,7 @@ export const errorHandler = (
 ) => {
   console.error(err);
 
-  logger.error("Error occurred:", {
+  logger.fatal("Error occurred:", {
     message: err?.message,
     stack: err?.stack,
     status: err?.status || 500,
