@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use(makeApiRoute("ftp"), ftpRoutes);
+app.use(makeApiRoute("/"), ftpRoutes);
 
 // Global error handler (should be after routes)
 app.use(errorHandler);
