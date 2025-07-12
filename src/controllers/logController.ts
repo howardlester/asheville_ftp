@@ -3,6 +3,7 @@ import { asyncHandler } from "../utils/exceptions";
 import path from "path";
 import fs from "fs";
 import { DateTime, IANAZone } from "luxon";
+import { logger } from "../utils/logger";
 
 export const formatLogs = asyncHandler(async (req: Request, res: Response) => {
   const { year, month, day } = req.params;
@@ -20,6 +21,12 @@ export const formatLogs = asyncHandler(async (req: Request, res: Response) => {
     month,
     `${day}.log`
   );
+
+  const fileExists = fs.existsSync(logFile);
+  if (!fileExists) {
+    logger.error(`Log file not found: ${logFile}`);
+    return res.status(404).send("Log file not found");
+  }
 
   const logData = fs.readFileSync(logFile, "utf8");
   const logs = logData

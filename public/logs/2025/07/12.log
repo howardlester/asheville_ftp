@@ -1,7 +1,1 @@
-{"level":"info","time":"2025-07-12T01:38:20.803Z","pid":70908,"hostname":"Lesters-MacBook-Pro.local","msg":"Processing FTP request with data"}
-{"level":"info","time":"2025-07-12T01:38:21.234Z","pid":70908,"hostname":"Lesters-MacBook-Pro.local","msg":"Transferred 0 bytes"}
-{"level":"info","time":"2025-07-12T01:38:21.378Z","pid":70908,"hostname":"Lesters-MacBook-Pro.local","msg":"Transferred 4301 bytes"}
-{"level":"info","time":"2025-07-12T01:38:21.803Z","pid":70908,"hostname":"Lesters-MacBook-Pro.local","msg":"Transferred 0 bytes"}
-{"level":"info","time":"2025-07-12T01:38:22.304Z","pid":70908,"hostname":"Lesters-MacBook-Pro.local","msg":"Transferred 81920 bytes"}
-{"level":"info","time":"2025-07-12T01:38:22.649Z","pid":70908,"hostname":"Lesters-MacBook-Pro.local","msg":"Transferred 356951 bytes"}
-{"level":"info","time":"2025-07-12T01:38:22.649Z","pid":70908,"hostname":"Lesters-MacBook-Pro.local","msg":"Downloaded file: AVSITE4_2025-07-02.csv to public/ftp"}
+{"level":"error","time":"2025-07-12T01:48:23.526Z","pid":40486,"hostname":"Lesters-MacBook-Pro.local","msg":"Log file not found: /Users/lesterhoward/Documents/Source360/Asheville/ftp/public/logs/2025/07/13.log"}

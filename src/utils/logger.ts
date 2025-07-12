@@ -2,6 +2,7 @@ import pino from "pino";
 import path from "path";
 import fs from "fs";
 import { DateTime } from "luxon";
+import { createFolder } from "./filesystem";
 
 export class Logger {
   private static instance: Logger;
