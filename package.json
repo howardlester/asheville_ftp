@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts | pino-pretty",
     "start": "ts-node src/server.ts ",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "processFtp": "ts-node src/libs/processFtp.ts"
   },
   "keywords": [],
   "author": "",
@@ -27,8 +28,13 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@fast-csv/format": "^5.0.2",
+    "@fast-csv/parse": "^5.0.2",
     "@sentry/node": "^9.38.0",
+    "@sentry/profiling-node": "^9.38.0",
     "basic-ftp": "5.0.5",
+    "chokidar": "^4.0.3",
+    "fast-csv": "^5.0.2",
     "luxon": "^3.7.1",
     "morgan": "^1.10.0",
     "pino": "^9.7.0",

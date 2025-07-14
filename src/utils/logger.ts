@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { DateTime } from "luxon";
 import { createFolder } from "./filesystem";
+import * as Sentry from "@sentry/node";
 
 export class Logger {
   private static instance: Logger;
@@ -53,22 +54,42 @@ export class Logger {
   }
 
   public info(message: string, ...args: any[]): void {
+    console.info(message, ...args);
     this.logger.info(message, ...args);
   }
 
   public error(message: string, ...args: any[]): void {
+    Sentry.captureException(new Error(message), {
+      extra: {
+        args,
+      },
+    });
+    console.error(message, ...args);
     this.logger.error(message, ...args);
   }
 
   public warn(message: string, ...args: any[]): void {
+    Sentry.captureException(new Error(message), {
+      extra: {
+        args,
+      },
+    });
+    console.warn(message, ...args);
     this.logger.warn(message, ...args);
   }
 
   public debug(message: string, ...args: any[]): void {
+    console.debug(message, ...args);
     this.logger.debug(message, ...args);
   }
 
   public fatal(message: string, ...args: any[]): void {
+    Sentry.captureException(new Error(message), {
+      extra: {
+        args,
+      },
+    });
+    console.error("FATAL:", message, ...args);
     this.logger.fatal(message, ...args);
   }
 

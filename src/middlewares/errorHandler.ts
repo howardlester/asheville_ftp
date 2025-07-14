@@ -11,8 +11,6 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error(err);
-
   logger.fatal("Error occurred:", {
     message: err?.message,
     stack: err?.stack,

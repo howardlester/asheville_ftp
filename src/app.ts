@@ -9,7 +9,6 @@ import morgan from "morgan";
 import "./utils/logger";
 import { etcRoutes } from "./routes/etcRoutes";
 import { logger, Logger } from "./utils/logger";
-
 const app = express();
 
 app.use(express.static("public"));
