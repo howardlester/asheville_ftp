@@ -17,9 +17,9 @@ export class Database {
   }
 
   public async connect(): Promise<void> {
-    if (this.isConnected) {
-      return;
-    }
+    // if (this.isConnected) {
+    //   return;
+    // }
 
     if (!process.env.DB_CONNECTION_STRING) {
       logger.fatal(
@@ -31,8 +31,11 @@ export class Database {
       const response = await mssql.connect({
         user: process.env.DB_USER || "sqladmin",
         password: process.env.DB_PASSWORD || "4iFWe6YT5I#C",
-        server: process.env.DB_SERVER || "tcp:ashevillesqlserver123.database.windows.net",
+        server:
+          process.env.DB_SERVER ||
+          "tcp:ashevillesqlserver123.database.windows.net",
         database: process.env.DB_DATABASE || "sensordb01",
+        connectionTimeout: 1000 * 60,
       });
       this.connection = response;
       this.isConnected = true;

@@ -45,7 +45,10 @@ const processCsvFile = async ({
         logger.info("Data from sensors_data:", data);
         requested = true;
       } catch (error) {
-        logger.error(`Error processing row in CSV file: ${fileName}. Details:`, error);
+        logger.error(
+          `Error processing row in CSV file: ${fileName}. Details:`,
+          error
+        );
       }
     })
     .on("end", () => {
@@ -64,7 +67,7 @@ const processCsvFile = async ({
 export const main = async () => {
   try {
     initializeSentry();
-    await Database.getInstance().connect();
+
     // Ensure the processed files directory exists
     createFolder(directoryWithProcessedFiles);
     logger.info("Starting FTP watcher on directory:", directoryWithFiles);
@@ -83,6 +86,7 @@ export const main = async () => {
 
     // Process files when they are added to the directory
     watcher.on("add", async (filePath, stats) => {
+      await Database.getInstance().connect();
       if (stats?.isFile()) {
         const fileExtension = path.extname(filePath);
         // Get file extension without dot (e.g., "csv", "txt")
