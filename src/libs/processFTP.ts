@@ -16,14 +16,14 @@ const directoryWithProcessedFiles = path.join(
   "public/ftp_processed"
 );
 
-logger.info("Starting FTP watcher...");
 
 export const main = () => {
   try {
     initializeSentry();
     // Ensure the processed files directory exists
     createFolder(directoryWithProcessedFiles);
-
+    logger.info("Starting FTP watcher on directory:", directoryWithFiles);
+    
     const watcher = chokidar.watch([directoryWithFiles], {
       // ignored: (path, stats) => !stats?.isFile(),
       persistent: true,
