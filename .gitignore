@@ -1,4 +1,4 @@
 public/logs/*
-public/logs/ftp*
+public/logs/ftp*/**
 .env
 node_modules/
