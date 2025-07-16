@@ -32,7 +32,7 @@ const processCsvFile = async ({
     .on("data", (row) => {
       const headers = Object.keys(row);
 
-      console.info("CSV row data:", row);
+      Database.getInstance().connection?.query('SELECT * from sensors_data;')
     })
     .on("end", () => {
       logger.info("CSV file processing completed:", fileName);
