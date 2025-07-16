@@ -46,6 +46,7 @@ const processCsvFile = async ({
         };
 
         logger.info("Inserting row into database:", dbItem);
+
         await Database.getInstance()
           .connection?.request()
           .query(
@@ -53,6 +54,7 @@ const processCsvFile = async ({
            VALUES ('${dbItem.created_at}', '${dbItem.hourminute}', ${dbItem.flow_gpm}, ${dbItem.pressure_psi}, '${dbItem.siteid}', '${dbItem.source}')`
           );
       } catch (error) {
+        console.error("Error processing row in CSV file:", error);
         logger.error(
           `Error processing row in CSV file: ${fileName}. Details:`,
           error
@@ -94,7 +96,7 @@ export const main = async () => {
 
     // Process files when they are added to the directory
     watcher.on("add", async (filePath, stats) => {
-      await Database.getInstance().connect();
+      // await Database.getInstance().connect();
       if (stats?.isFile()) {
         const fileExtension = path.extname(filePath);
         // Get file extension without dot (e.g., "csv", "txt")
@@ -113,7 +115,13 @@ export const main = async () => {
         // Example: Process different file types
         switch (fileType) {
           case "csv":
-            await processCsvFile({ filePath, fileName });
+            // await processCsvFile({ filePath, fileName });
+            await new Promise<void>(async (resolve, reject) => {
+              setTimeout(async () => {
+                console.info("Processing CSV file:", fileName);
+                resolve();
+              }, 2000);
+            });
             break;
           case "txt":
             logger.info("Processing TXT file:", fileName);
