@@ -63,10 +63,11 @@ export const main = () => {
               .on("data", (row) => {})
               .on("end", () => {
                 logger.info("CSV file processing completed:", fileName);
-                fs.renameSync(
-                  filePath,
-                  path.join(directoryWithProcessedFiles, fileName)
-                );
+                // Move the processed file to the processed directory
+                // fs.renameSync(
+                //   filePath,
+                //   path.join(directoryWithProcessedFiles, fileName)
+                // );
               })
               .on("error", (error) => {
                 logger.error(
