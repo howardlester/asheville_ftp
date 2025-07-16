@@ -1,3 +1,4 @@
+import "dotenv/config";
 import mssql from "mssql";
 import { logger } from "../utils/logger";
 
