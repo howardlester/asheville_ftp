@@ -41,7 +41,8 @@ const processCsvFile = async ({
         const data = await Database.getInstance().connection?.query(
           "SELECT * from sensors_data;"
         );
-        console.info("Data from sensors_data:", data);
+
+        logger.info("Data from sensors_data:", data);
         requested = true;
       } catch (error) {
         logger.error(`Error processing row in CSV file: ${fileName}. Details:`, error);

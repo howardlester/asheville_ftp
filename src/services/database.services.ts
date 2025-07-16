@@ -28,11 +28,13 @@ export class Database {
     }
 
     try {
-      const response = await mssql.connect(
-        process.env.DB_CONNECTION_STRING as string
-      );
+      const response = await mssql.connect({
+        user: process.env.DB_USER || "sqladmin",
+        password: process.env.DB_PASSWORD || "4iFWe6YT5I#C",
+        server: process.env.DB_SERVER || "tcp:ashevillesqlserver123.database.windows.net",
+        database: process.env.DB_DATABASE || "sensordb01",
+      });
       this.connection = response;
-
       this.isConnected = true;
       logger.info("Database connection established successfully.");
     } catch (error) {
