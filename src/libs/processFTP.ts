@@ -10,7 +10,7 @@ import "dotenv/config";
 const directoryWithFiles =
   process.env.IS_RUNNING_LOCALLY === 'true'
     ? path.join(process.cwd(), "public/ftp")
-    : "C:\\FTP\\mckimcreed";
+    : "C:\\FTP\\mckimcreed_testing";
 const directoryWithProcessedFiles = path.join(
   process.cwd(),
   "public/ftp_processed"
