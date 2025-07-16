@@ -91,6 +91,7 @@ export class Logger {
     });
     console.error("FATAL:", message, ...args);
     this.logger.fatal(message, ...args);
+    process.exit(1);
   }
 
   // Method to create a new logger for the current date (useful for long-running processes)

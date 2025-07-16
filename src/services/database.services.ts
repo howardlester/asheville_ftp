@@ -20,6 +20,12 @@ export class Database {
       return;
     }
 
+    if (!process.env.DB_CONNECTION_STRING) {
+      logger.fatal(
+        "Database connection string is not defined in environment variables."
+      );
+    }
+
     try {
       const response = await mssql.connect(
         process.env.DB_CONNECTION_STRING as string

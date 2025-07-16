@@ -1,3 +1,4 @@
+import "dotenv/config";
 import chokidar from "chokidar";
 import { logger } from "../utils/logger";
 import path from "path";
@@ -5,7 +6,6 @@ import fs from "fs";
 import * as csv from "fast-csv";
 import { createFolder } from "../utils/filesystem";
 import { initializeSentry } from "./sentry";
-import "dotenv/config";
 import { DB_TYPE_ONE } from "../types/db.types";
 import { Database } from "../services/database.services";
 // C:\FTP
