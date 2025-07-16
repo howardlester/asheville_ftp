@@ -6,9 +6,10 @@ import * as csv from "fast-csv";
 import { createFolder } from "../utils/filesystem";
 import { initializeSentry } from "./sentry";
 import "dotenv/config";
+import { DB_TYPE_ONE } from "../types/db.types";
 // C:\FTP
 const directoryWithFiles =
-  process.env.IS_RUNNING_LOCALLY === 'true'
+  process.env.IS_RUNNING_LOCALLY === "true"
     ? path.join(process.cwd(), "public/ftp")
     : "C:\\FTP\\mckimcreed_testing";
 const directoryWithProcessedFiles = path.join(
@@ -16,14 +17,13 @@ const directoryWithProcessedFiles = path.join(
   "public/ftp_processed"
 );
 
-
 export const main = () => {
   try {
     initializeSentry();
     // Ensure the processed files directory exists
     createFolder(directoryWithProcessedFiles);
     logger.info("Starting FTP watcher on directory:", directoryWithFiles);
-    
+
     const watcher = chokidar.watch([directoryWithFiles], {
       // ignored: (path, stats) => !stats?.isFile(),
       persistent: true,
@@ -60,7 +60,9 @@ export const main = () => {
 
             fs.createReadStream(filePath)
               .pipe(csv.parse({ headers: true }))
-              .on("data", (row) => {})
+              .on("data", (row) => {
+                console.info("CSV Row Data:", row);
+              })
               .on("end", () => {
                 logger.info("CSV file processing completed:", fileName);
                 // Move the processed file to the processed directory
