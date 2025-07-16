@@ -5,9 +5,12 @@ import fs from "fs";
 import * as csv from "fast-csv";
 import { createFolder } from "../utils/filesystem";
 import { initializeSentry } from "./sentry";
-import 'dotenv/config';
-
-const directoryWithFiles = path.join(process.cwd(), "public/ftp");
+import "dotenv/config";
+// C:\FTP
+const directoryWithFiles =
+  process.env.IS_RUNNING_LOCALLY === 'true'
+    ? path.join(process.cwd(), "public/ftp")
+    : "C:\\FTP";
 const directoryWithProcessedFiles = path.join(
   process.cwd(),
   "public/ftp_processed"
@@ -26,7 +29,7 @@ export const main = () => {
       persistent: true,
     });
 
-    logger.error('Test Sentry')
+    logger.error("Test Sentry");
 
     watcher.on("error", () => {
       logger.error(
