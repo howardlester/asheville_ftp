@@ -7,6 +7,7 @@ import { createFolder } from "../utils/filesystem";
 import { initializeSentry } from "./sentry";
 import "dotenv/config";
 import { DB_TYPE_ONE } from "../types/db.types";
+import { Database } from "../services/database.services";
 // C:\FTP
 const directoryWithFiles =
   process.env.IS_RUNNING_LOCALLY === "true"
@@ -17,9 +18,39 @@ const directoryWithProcessedFiles = path.join(
   "public/ftp_processed"
 );
 
-export const main = () => {
+const processCsvFile = async ({
+  filePath,
+  fileName,
+}: {
+  filePath: string;
+  fileName: string;
+}) => {
+  logger.info("Processing CSV file:", fileName);
+
+  fs.createReadStream(filePath)
+    .pipe(csv.parse({ headers: true }))
+    .on("data", (row) => {
+      const headers = Object.keys(row);
+
+      console.info("CSV row data:", row);
+    })
+    .on("end", () => {
+      logger.info("CSV file processing completed:", fileName);
+      // Move the processed file to the processed directory
+      // fs.renameSync(
+      //   filePath,
+      //   path.join(directoryWithProcessedFiles, fileName)
+      // );
+    })
+    .on("error", (error) => {
+      logger.error(`Error processing CSV file: ${fileName}. Error:`, error);
+    });
+};
+
+export const main = async () => {
   try {
     initializeSentry();
+    await Database.getInstance().connect();
     // Ensure the processed files directory exists
     createFolder(directoryWithProcessedFiles);
     logger.info("Starting FTP watcher on directory:", directoryWithFiles);
@@ -37,7 +68,7 @@ export const main = () => {
     });
 
     // Process files when they are added to the directory
-    watcher.on("add", (filePath, stats) => {
+    watcher.on("add", async (filePath, stats) => {
       if (stats?.isFile()) {
         const fileExtension = path.extname(filePath);
         // Get file extension without dot (e.g., "csv", "txt")
@@ -56,28 +87,7 @@ export const main = () => {
         // Example: Process different file types
         switch (fileType) {
           case "csv":
-            logger.info("Processing CSV file:", fileName);
-
-            fs.createReadStream(filePath)
-              .pipe(csv.parse({ headers: true }))
-              .on("data", (row) => {
-                console.info("CSV Row Data:", row);
-              })
-              .on("end", () => {
-                logger.info("CSV file processing completed:", fileName);
-                // Move the processed file to the processed directory
-                // fs.renameSync(
-                //   filePath,
-                //   path.join(directoryWithProcessedFiles, fileName)
-                // );
-              })
-              .on("error", (error) => {
-                logger.error(
-                  `Error processing CSV file: ${fileName}. Error:`,
-                  error
-                );
-              });
-
+            await processCsvFile({ filePath, fileName });
             break;
           case "txt":
             logger.info("Processing TXT file:", fileName);
