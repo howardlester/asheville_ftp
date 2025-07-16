@@ -26,24 +26,32 @@ const processCsvFile = async ({
   fileName: string;
 }) => {
   logger.info("Processing CSV file:", fileName);
-  let requested = false;
 
   fs.createReadStream(filePath)
     .pipe(csv.parse({ headers: true }))
-    .on("data", async (row) => {
+    .on("data", async (row: Partial<DB_TYPE_ONE>) => {
       try {
-        if (requested) {
-          return;
-        }
-
         const headers = Object.keys(row);
 
-        const data = await Database.getInstance().connection?.query(
-          "SELECT * from sensors_data;"
-        );
+        // const data = await Database.getInstance().connection?.query(
+        //   "SELECT * from sensors_data;"
+        // );
+        const item = {
+          created_at: row.createdtimestamp,
+          hourminute: row.hourminute,
+          flow_gpm: row.flow_gpm,
+          pressure_psi: row.pressure_psi,
+          site_id: row.siteid,
+          source: row.source,
+        };
 
-        logger.info("Data from sensors_data:", data);
-        requested = true;
+        logger.info("Inserting row into database:", item);
+        await Database.getInstance()
+          .connection?.request()
+          .query(
+            `INSERT INTO sensors_data (created_at, hourminute, flow_gpm, pressure_psi, site_id, source) 
+           VALUES ('${item.created_at}', '${item.hourminute}', ${item.flow_gpm}, ${item.pressure_psi}, '${item.site_id}', '${item.source}')`
+          );
       } catch (error) {
         logger.error(
           `Error processing row in CSV file: ${fileName}. Details:`,
