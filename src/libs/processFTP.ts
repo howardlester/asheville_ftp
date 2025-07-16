@@ -10,7 +10,7 @@ import "dotenv/config";
 const directoryWithFiles =
   process.env.IS_RUNNING_LOCALLY === 'true'
     ? path.join(process.cwd(), "public/ftp")
-    : "C:\\FTP";
+    : "C:\\FTP\\mckimcreed";
 const directoryWithProcessedFiles = path.join(
   process.cwd(),
   "public/ftp_processed"
@@ -28,8 +28,6 @@ export const main = () => {
       // ignored: (path, stats) => !stats?.isFile(),
       persistent: true,
     });
-
-    logger.error("Test Sentry");
 
     watcher.on("error", () => {
       logger.error(
