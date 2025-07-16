@@ -10,8 +10,6 @@ import * as Sentry from "@sentry/node";
 
 export const initializeSentry = () => {
   try {
-    console.info('process.env.SENTRY_DSN', process.env.SENTRY_DSN);
-    
     Sentry.init({
       dsn: process.env.SENTRY_DSN,
 

@@ -1,13 +1,13 @@
 import "dotenv/config";
 import express from "express";
-import { ftpRoutes } from "./routes/ftpRoutes";
+import { ftpRoutes } from "./routes/ftp.routes";
 import { errorHandler } from "./middlewares/errorHandler";
 import { makeApiRoute } from "./utils/routeUtils";
 import "./libs/sentry";
 import "./libs/ftp";
 import morgan from "morgan";
 import "./utils/logger";
-import { etcRoutes } from "./routes/etcRoutes";
+import { etcRoutes } from "./routes/etc.routes";
 import { logger, Logger } from "./utils/logger";
 const app = express();
 

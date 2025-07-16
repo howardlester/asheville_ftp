@@ -1,5 +1,5 @@
 // createdtimestamp,hourminute,siteid,flow_gpm,pressure_psi,source
-export interface DB_TYPE_ONE {
+export interface AYEKA_CSV {
   createdtimestamp: string;
   hourminute: string;
   siteid: string;

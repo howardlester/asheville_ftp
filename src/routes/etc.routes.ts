@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { formatLogs } from "../controllers/logController";
+import { formatLogs } from "../controllers/log.controllers";
 
 export const etcRoutes = Router();
 

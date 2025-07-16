@@ -54,6 +54,7 @@ export class Logger {
   }
 
   public info(message: string, ...args: any[]): void {
+    console.info(message, ...args);
     this.logger.info(message, ...args);
   }
 
