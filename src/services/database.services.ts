@@ -36,7 +36,12 @@ export class Database {
             "ashevillesqlserver123.database.windows.net",
           database: process.env.DB_DATABASE || "sensordb01",
           connectionTimeout: 1000 * 60,
-          requestTimeout: 1000 * 60 * 2,
+          requestTimeout: 1000 * 60 * 10,
+          pool: {
+            max: 10,
+            min: 0,
+            idleTimeoutMillis: 1000 * 60,
+          }
         });
     //   const response = await mssql.connect(
     //     process.env.DB_CONNECTION_STRING || ""
