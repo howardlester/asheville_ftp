@@ -26,13 +26,26 @@ const processCsvFile = async ({
   fileName: string;
 }) => {
   logger.info("Processing CSV file:", fileName);
+  let requested = false;
 
   fs.createReadStream(filePath)
     .pipe(csv.parse({ headers: true }))
-    .on("data", (row) => {
-      const headers = Object.keys(row);
+    .on("data", async (row) => {
+      try {
+        if (requested) {
+          return;
+        }
 
-      Database.getInstance().connection?.query('SELECT * from sensors_data;')
+        const headers = Object.keys(row);
+
+        const data = await Database.getInstance().connection?.query(
+          "SELECT * from sensors_data;"
+        );
+        console.info("Data from sensors_data:", data);
+        requested = true;
+      } catch (error) {
+        logger.error(`Error processing row in CSV file: ${fileName}. Details:`, error);
+      }
     })
     .on("end", () => {
       logger.info("CSV file processing completed:", fileName);
@@ -43,7 +56,7 @@ const processCsvFile = async ({
       // );
     })
     .on("error", (error) => {
-      logger.error(`Error processing CSV file: ${fileName}. Error:`, error);
+      logger.error(`Error processing CSV file: ${fileName}. Details:`, error);
     });
 };
 
