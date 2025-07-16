@@ -33,7 +33,7 @@ export class Database {
           password: process.env.DB_PASSWORD || "4iFWe6YT5I#C",
           server:
             process.env.DB_SERVER ||
-            "tcp:ashevillesqlserver123.database.windows.net",
+            "ashevillesqlserver123.database.windows.net",
           database: process.env.DB_DATABASE || "sensordb01",
           connectionTimeout: 1000 * 60,
           requestTimeout: 1000 * 60 * 2,
