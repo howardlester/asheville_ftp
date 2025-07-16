@@ -36,21 +36,21 @@ const processCsvFile = async ({
         // const data = await Database.getInstance().connection?.query(
         //   "SELECT * from sensors_data;"
         // );
-        const item = {
+        const dbItem = {
           created_at: row.createdtimestamp,
           hourminute: row.hourminute,
           flow_gpm: row.flow_gpm,
           pressure_psi: row.pressure_psi,
-          site_id: row.siteid,
+          siteid: row.siteid,
           source: row.source,
         };
 
-        logger.info("Inserting row into database:", item);
+        logger.info("Inserting row into database:", dbItem);
         await Database.getInstance()
           .connection?.request()
           .query(
-            `INSERT INTO sensors_data (created_at, hourminute, flow_gpm, pressure_psi, site_id, source) 
-           VALUES ('${item.created_at}', '${item.hourminute}', ${item.flow_gpm}, ${item.pressure_psi}, '${item.site_id}', '${item.source}')`
+            `INSERT INTO sensors_data (created_at, hourminute, flow_gpm, pressure_psi, siteid, source) 
+           VALUES ('${dbItem.created_at}', '${dbItem.hourminute}', ${dbItem.flow_gpm}, ${dbItem.pressure_psi}, '${dbItem.siteid}', '${dbItem.source}')`
           );
       } catch (error) {
         logger.error(
