@@ -1,12 +1,12 @@
 import "dotenv/config";
 import chokidar from "chokidar";
-import { logger } from "../utils/logger";
+import { logger } from "./utils/logger";
 import path from "path";
-import { createFolder } from "../utils/filesystem";
-import { initializeSentry } from "./sentry";
+import { createFolder } from "./utils/filesystem";
+import { initializeSentry } from "./libs/sentry";
 import PQueue from "p-queue";
-import { processCsvFile } from "../helpers/file-processing.helpers";
-import { log } from "console";
+import { processCsvFile } from "./helpers/fileProcessing.helpers";
+import { directoryWithProcessedFTPFiles } from "./config/ftp.config";
 
 // Set up a queue to process files sequentially
 const queue = new PQueue({ concurrency: 1 });
@@ -14,18 +14,17 @@ const queue = new PQueue({ concurrency: 1 });
 const directoryWithFiles =
   process.env.IS_RUNNING_LOCALLY === "true"
     ? path.join(process.cwd(), "public/ftp")
-    : "C:\\FTP\\mckimcreed_testing";
-const directoryWithProcessedFiles = path.join(
-  process.cwd(),
-  "public/ftp_processed"
-);
+    : "C:\\FTP";
+
+const limitFilesProcessing = 2;
+const filesProcessed: string[] = [];
 
 export const main = async () => {
   try {
     initializeSentry();
 
     // Ensure the processed files directory exists
-    createFolder(directoryWithProcessedFiles);
+    createFolder(directoryWithProcessedFTPFiles);
     logger.info("Starting FTP watcher on directory:", directoryWithFiles);
 
     const watcher = chokidar.watch([directoryWithFiles], {
@@ -43,6 +42,15 @@ export const main = async () => {
     // Process files when they are added to the directory
     watcher.on("add", async (filePath, stats) => {
       const processAddedFile = async () => {
+        if (
+          limitFilesProcessing > 0 &&
+          limitFilesProcessing !== Infinity &&
+          filesProcessed.length >= limitFilesProcessing
+        ) {
+          logger.info("File processing limit reached, skipping:", filePath);
+          return;
+        }
+
         if (stats?.isFile()) {
           const fileExtension = path.extname(filePath);
           // Get file extension without dot (e.g., "csv", "txt")
@@ -78,7 +86,10 @@ export const main = async () => {
       };
 
       // Add the file processing to the queue
+
       queue.add(() => processAddedFile());
+
+      filesProcessed.push(filePath);
     });
   } catch (error) {
     logger.fatal("Fatal error in FTP watcher:", error);
