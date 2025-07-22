@@ -6,7 +6,8 @@ import { createFolder } from "./utils/filesystem";
 import { initializeSentry } from "./libs/sentry";
 import PQueue from "p-queue";
 import { processCsvFile } from "./helpers/fileProcessing.helpers";
-import { directoryWithProcessedFTPFiles } from "./config/ftp.config";
+import { directoryWithProcessedFTPFiles } from "./constants/ftpConstants";
+import { ParentFolderNameInFTP } from "./types/filesystem";
 
 // Set up a queue to process files sequentially
 const queue = new PQueue({ concurrency: 1 });
@@ -16,7 +17,7 @@ const directoryWithFiles =
     ? path.join(process.cwd(), "public/ftp")
     : "C:\\FTP";
 
-const limitFilesProcessing = 2;
+const limitFilesProcessing = Infinity;
 const filesProcessed: string[] = [];
 
 export const main = async () => {
@@ -57,6 +58,7 @@ export const main = async () => {
           const fileType = path.extname(filePath).substring(1).toLowerCase();
           const fileName = path.basename(filePath);
           const fileNameWithoutExt = path.basename(filePath, fileExtension);
+          const parentFolderName = path.basename(path.dirname(filePath)) as ParentFolderNameInFTP
 
           logger.info("New file added to FTP directory, processing...", {
             filePath,
@@ -70,7 +72,7 @@ export const main = async () => {
           switch (fileType) {
             case "csv":
               try {
-                await processCsvFile({ filePath, fileName });
+                await processCsvFile({ filePath, fileName, parentFolderName });
               } catch (error) {
                 logger.error(`Error processing CSV file: ${fileName}`, error);
               }

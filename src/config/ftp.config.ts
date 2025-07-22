@@ -6,8 +6,3 @@ export const ftpClientConfig = {
   password: process.env.FTP_PASSWORD,
 };
 
-
-export const directoryWithProcessedFTPFiles = path.join(
-  process.cwd(),
-  "public/ftp_processed"
-);

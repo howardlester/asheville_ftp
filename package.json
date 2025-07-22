@@ -6,7 +6,8 @@
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts | pino-pretty",
     "start": "ts-node src/server.ts ",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ftp": "ts-node src/processFtp.ts"
+    "ftp:development": "nodemon src/processFtp.ts",
+    "ftp:production": "ts-node src/processFtp.ts"
   },
   "keywords": [],
   "author": "",
