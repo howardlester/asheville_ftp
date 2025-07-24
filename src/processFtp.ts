@@ -15,7 +15,8 @@ const queue = new PQueue({ concurrency: 1 });
 const directoryWithFiles =
   process.env.IS_RUNNING_LOCALLY === "true"
     ? path.join(process.cwd(), "public/ftp")
-    : "C:\\FTP";
+    : "C:\\FTP for testing";
+    // : "C:\\FTP";
 
 const limitFilesProcessing = Infinity;
 const filesProcessed: string[] = [];
